@@ -1,73 +1,83 @@
-// ---------------------------------------------IF STMT----------------------------------------------
-// let light = "GREEN";
-// let RED,YELLOW,GREEN;
-
-// if(light == "RED"){
-
-// console.log('STOP');
-
-// }
-
-// if(light== "YELLOW"){
-
-// console.log('GO SLOW');
-
-// }
-
-// if(light=="GREEN"){
-
-// console.log('YOU CAN GO NOW');
-
-// }
-// console.log("thank uou")
-
-// ---------------------------------------------IF ELSE AND ELSE IF STMT----------------------------------------------
+let userseq = [];
+let gameseq = [];
 
 
-// let size = "S";
+let h1 = document.querySelector("h1");
+let h3 = document.querySelector("h3");
+let level = 0;
 
-// if(size=="XL"){
-//     console.log("price: 250rs");
-// }
-// else if(size=="L"){
-//     console.log("price: 200rs");
-
-// }
-// else if(size=="M"){
-//     console.log("price: 100rs");
-
-// }
-// else{
-//     console.log("price: 50rs");
-
-// }
-
-// ---------------------------------------------NESTED IF ELSE STMT----------------------------------------------
-
-// let mark = "40";
-
-// if(mark<=33){
-//     console.log('better luck next time!');
-//     if(mark<=80){
-//         console.log('your grade is A');
-
-//     }
-//     else{
-//         console.log('your grade is A')
-//     }
-// }
-// else{
-//     console.log('you are pass');
-// }
-// ---------------------------------------------logical oprators----------------------------------------------
+let gamestart = false;
+let btns = ["yellow","blue","red","green"];
 
 
-// let str = "apple";
+document.addEventListener("keypress",function(){
+  
+    if(gamestart==false){
+          gamestart = true;
+          levelup();
+    };
+})
 
-// if((str[0]==="a"&&(str>3))){
-//     console.log(`${str} is a good string`);
-// }
-// else{
-//     console.log(`${str} is a not good string`);
+function btnflash(btn){
+    btn.classList.add("flash");
+    setTimeout(() => {
+        btn.classList.remove("flash");
+    }, 250);
+    
+}
 
-// }
+
+
+
+function levelup(){
+ userseq = [];   
+ level ++;
+ h3.innerText = `level:${level}`;
+ let randindx =Math.floor(Math.random()*4);
+ let randcolor = btns[randindx];
+gameseq.push(randcolor);
+console.log(gameseq);
+ let randbtn = document.querySelector(`.${randcolor}`);
+ btnflash(randbtn);;
+}
+
+function checkans(ind){
+
+    if(gameseq[ind]==userseq[ind]){
+        if(userseq.length==gameseq.length){
+            
+            setTimeout(levelup,1000);
+
+        }
+    }else{
+        console.log("game over");
+ h3.innerText = `level:${level} game is over! \n press any key to restart`;
+    reset();
+
+    }
+};
+
+function btnpress(){
+    console.log(this);
+    let btn = this;
+    btnflash(btn);
+    let usercolor = btn.getAttribute("id");
+    console.log(usercolor);
+    userseq.push(usercolor);
+    checkans(userseq.length-1);
+    
+};
+
+let button = document.querySelectorAll(".btn");
+
+for(allbtn of button){
+   allbtn.addEventListener("click",btnpress);
+};
+
+function reset(){
+
+    gamestart = false;
+    gameseq = [];
+    userseq = [];
+    level = 0;
+}
