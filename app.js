@@ -1,83 +1,101 @@
-let userseq = [];
-let gameseq = [];
+// call back hell---------------------------------------
+// promises---------------------------------------
+
+function savedata(data){
+ let netspeed = Math.floor(Math.random()*10+1);
+
+  if(netspeed>5){
+    console.log(`your data is saved:`, data ,`\n speed:${netspeed}`);
+  }else{
+    console.log(`your internet speed is very poor speed:${netspeed}`);
+  }
+
+};
+
+savedata("subham,rahul");
 
 
-let h1 = document.querySelector("h1");
-let h3 = document.querySelector("h3");
-let level = 0;
+// promises    then() , catch() ---------------------------------------
 
-let gamestart = false;
-let btns = ["yellow","blue","red","green"];
+function savetodata (data){
+    return new Promise ((resolve,reject ) => {
+        let netspeed = Math.floor(Math.random()*10)+1;
+        if(netspeed>5){
+            resolve("succes : data was saved");
+        } else{
+            reject("failure : week connection ");
+        }
+    })
 
+}
 
-document.addEventListener("keypress",function(){
-  
-    if(gamestart==false){
-          gamestart = true;
-          levelup();
-    };
+let request = savetodata("subham sahoo");
+console.log(request);
+
+request.then(()=>{
+console.log("promises was resolve");
+
 })
 
-function btnflash(btn){
-    btn.classList.add("flash");
-    setTimeout(() => {
-        btn.classList.remove("flash");
-    }, 250);
-    
-}
+.catch(()=>{
+    console.log("promise was reject")
+})
 
+// promises  improve verson ---------------------------------------
 
-
-
-function levelup(){
- userseq = [];   
- level ++;
- h3.innerText = `level:${level}`;
- let randindx =Math.floor(Math.random()*4);
- let randcolor = btns[randindx];
-gameseq.push(randcolor);
-console.log(gameseq);
- let randbtn = document.querySelector(`.${randcolor}`);
- btnflash(randbtn);;
-}
-
-function checkans(ind){
-
-    if(gameseq[ind]==userseq[ind]){
-        if(userseq.length==gameseq.length){
-            
-            setTimeout(levelup,1000);
-
+function savetodata (data){
+    return new Promise ((resolve,reject ) => {
+        let netspeed = Math.floor(Math.random()*10)+1;
+        if(netspeed>5){
+            resolve("succes : data was saved");
+        } else{
+            reject("failure : week connection ");
         }
-    }else{
-        console.log("game over");
- h3.innerText = `level:${level} game is over! \n press any key to restart`;
-    reset();
+    })
 
-    }
-};
-
-function btnpress(){
-    console.log(this);
-    let btn = this;
-    btnflash(btn);
-    let usercolor = btn.getAttribute("id");
-    console.log(usercolor);
-    userseq.push(usercolor);
-    checkans(userseq.length-1);
-    
-};
-
-let button = document.querySelectorAll(".btn");
-
-for(allbtn of button){
-   allbtn.addEventListener("click",btnpress);
-};
-
-function reset(){
-
-    gamestart = false;
-    gameseq = [];
-    userseq = [];
-    level = 0;
 }
+
+savetodata("subham sahoo")
+.then(()=>{
+console.log("data 1 is saved");
+return savetodb("sanjay");
+})
+.then(()=>{
+console.log("data 3 is saved");
+ return savetodb("puja");
+})
+.then(()=>{
+console.log("data 3 is saved");
+
+})
+
+.catch(()=>{
+    console.log("promise was reject")
+});
+
+
+// change coller ---------------------------------------
+
+let h1 = document.querySelector("h1");
+function changecolor(color,delay){
+    return new Promise((resolve,reject) =>{
+        setTimeout(() => {
+            h1.style.color= color;
+            resolve("color was change");
+        }, delay);
+    });
+}
+
+changecolor("red",1000)
+ .then(()=>{
+    console.log("red color was complited");
+    return changecolor("blue",1000);
+ })
+ .then(()=>{
+    console.log(" blue color was complited");
+    return changecolor("green",1000);
+ })
+  .then(()=>{
+    console.log("green color was complited");
+  
+  })
